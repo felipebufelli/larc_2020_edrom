@@ -85,7 +85,11 @@ for image_path in TEST_IMAGE_PATHS:
     arq_name = image_path[12:len(image_path)-4] + '.txt'
     list_of_arq_names.append(arq_name)
 
+    count_to_save += 1
+    if (count_to_save % 10 == 0):
+        print("{} images loaded.".format(count_to_save))
 
+print("{} images loaded.".format(count_to_save))
 count_to_save = 0
 
 
