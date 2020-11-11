@@ -74,8 +74,7 @@ list_of_images_names = []
 for image_path in TEST_IMAGE_PATHS:
     image = Image.open(image_path)
     image_np = load_image_into_numpy_array(image)
-    image_np_expanded = np.expand_dims(image_np, axis=0)
-    list_of_images_arrays.append(image_np_expanded)
+    list_of_images_arrays.append(image_np)
 
     image_name = image_path[12:len(image_path)]
     list_of_images_names.append(image_name)
@@ -98,21 +97,21 @@ with detection_graph.as_default():
         num_detections = detection_graph.get_tensor_by_name('num_detections:0')
         os.system('clear')
         print('Processing detection...\n\n')
-        for image in list_of_images_arrays:
+        for image_np in list_of_images_arrays:
             image_name = list_of_images_names[count_to_save]
 
             # the array based representation of the image will be used later in order to prepare the
             # result image with boxes and labels on it.
 
             # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
-
+            image_np_expanded = np.expand_dims(image_np, axis=0)
             # Actual detection.
             (boxes, scores, classes, num) = sess.run(
                 [detection_boxes, detection_scores, detection_classes, num_detections],
-                feed_dict={image_tensor: image})
+                feed_dict={image_tensor: image_np_expanded})
             
             image_to_save = vis_util.visualize_boxes_and_labels_on_image_array(
-                image,
+                image_np,
                 np.squeeze(boxes),
                 np.squeeze(classes).astype(np.int32),
                 np.squeeze(scores),
@@ -136,7 +135,7 @@ with detection_graph.as_default():
             scores = np.array(scores[0])
             lista_scores = scores[scores>=0.5]
             #Obtendo parâmetros de cada bounding box
-            image_size_param = np.array([image.height, image.width,image.height, image.width])
+            image_size_param = np.array([image_np.shape[0], image_np.shape[1],image_np.shape[0], image_np.shape[1]])
             
             for i in range(len(lista_scores)):
                 bounding_box_param = np.multiply(boxes[0][i], image_size_param)
