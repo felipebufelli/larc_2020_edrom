@@ -60,7 +60,7 @@ def load_image_into_numpy_array(image):
 
 #*DETECTION IN IMAGES
 PATH_TO_TEST_IMAGES_DIR = 'test_images'
-TEST_IMAGE_PATHS = [ os.path.join(PATH_TO_TEST_IMAGES_DIR, 'robot_test_{}.jpg'.format(i)) for i in range(1, 31) ]
+TEST_IMAGE_PATHS = [ os.path.join(PATH_TO_TEST_IMAGES_DIR, 'robot_test_{}.jpg'.format(i)) for i in range(1, len(os.listdir("test_images")) + 1)]
 IMAGE_SIZE = (12, 8)
 
 images = []
@@ -85,6 +85,8 @@ for image_path in TEST_IMAGE_PATHS:
     arq_name = image_path[12:len(image_path)-4] + '.txt'
     list_of_arq_names.append(arq_name)
 
+
+count_to_save = 0
 
 
 with detection_graph.as_default():
