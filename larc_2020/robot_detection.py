@@ -73,11 +73,16 @@ list_of_images_names = []
 
 for image_path in TEST_IMAGE_PATHS:
     image = Image.open(image_path)
-    list_of_images_arrays.append(image)
+    image_np = load_image_into_numpy_array(image)
+    image_np_expanded = np.expand_dims(image_np, axis=0)
+    list_of_images_arrays.append(image_np_expanded)
+
     image_name = image_path[12:len(image_path)]
     list_of_images_names.append(image_name)
+
     arq_name = image_path[12:len(image_path)-4] + '.txt'
     list_of_arq_names.append(arq_name)
+
 
 
 with detection_graph.as_default():
@@ -98,16 +103,16 @@ with detection_graph.as_default():
 
             # the array based representation of the image will be used later in order to prepare the
             # result image with boxes and labels on it.
-            image_np = load_image_into_numpy_array(image)
+
             # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
-            image_np_expanded = np.expand_dims(image_np, axis=0)
+
             # Actual detection.
             (boxes, scores, classes, num) = sess.run(
                 [detection_boxes, detection_scores, detection_classes, num_detections],
-                feed_dict={image_tensor: image_np_expanded})
+                feed_dict={image_tensor: image})
             
             image_to_save = vis_util.visualize_boxes_and_labels_on_image_array(
-                image_np,
+                image,
                 np.squeeze(boxes),
                 np.squeeze(classes).astype(np.int32),
                 np.squeeze(scores),
