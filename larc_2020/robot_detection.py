@@ -68,6 +68,17 @@ count_to_save = 0
 list_of_arq_names = []
 list_of_boundings = []
 times = []
+list_of_images_arrays = []
+list_of_images_names = []
+
+for image_path in TEST_IMAGE_PATHS:
+    image = Image.open(image_path)
+    list_of_images_arrays.append(image)
+    image_name = image_path[12:len(image_path)]
+    list_of_images_names.append(image_name)
+    arq_name = image_path[12:len(image_path)-4] + '.txt'
+    list_of_arq_names.append(arq_name)
+
 
 with detection_graph.as_default():
     with tf.compat.v1.Session(graph=detection_graph) as sess:
@@ -82,9 +93,9 @@ with detection_graph.as_default():
         num_detections = detection_graph.get_tensor_by_name('num_detections:0')
         os.system('clear')
         print('Processing detection...\n\n')
-        for image_path in TEST_IMAGE_PATHS:
-            image_name = image_path[12:len(image_path)]
-            image = Image.open(image_path)
+        for image in list_of_images_arrays:
+            image_name = list_of_images_names[count_to_save]
+
             # the array based representation of the image will be used later in order to prepare the
             # result image with boxes and labels on it.
             image_np = load_image_into_numpy_array(image)
@@ -114,8 +125,6 @@ with detection_graph.as_default():
 
             #Escrevendo .txt
             bounding = []
-            arq_name = image_path[12:len(image_path)-4] + '.txt'
-            list_of_arq_names.append(arq_name)
             bounding_box_param = []
             lista_scores = []
             #Obtendo scores de cada reconhecimento
