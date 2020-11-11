@@ -24,6 +24,7 @@ sys.path.append("..")
 
 #*OBJECT DETECTION IMPORTS
 os.chdir('TFmodels/research/')
+sys.path.append(os.getcwd()+"object_detection/")
 from object_detection.utils import label_map_util
 from object_detection.utils import visualization_utils as vis_util
 from object_detection.utils import ops as util_ops
@@ -59,7 +60,7 @@ def load_image_into_numpy_array(image):
 
 #*DETECTION IN IMAGES
 PATH_TO_TEST_IMAGES_DIR = 'test_images'
-TEST_IMAGE_PATHS = [ os.path.join(PATH_TO_TEST_IMAGES_DIR, 'robot_test_{}.jpg'.format(i)) for i in range(1, 16) ]
+TEST_IMAGE_PATHS = [ os.path.join(PATH_TO_TEST_IMAGES_DIR, 'robot_test_{}.jpg'.format(i)) for i in range(1, 31) ]
 IMAGE_SIZE = (12, 8)
 
 images = []
@@ -107,7 +108,7 @@ with detection_graph.as_default():
             if(count_to_save%5 == 0):
                 print('Number of images processed: ', count_to_save)
                 
-            if(count_to_save < 5):
+            if(count_to_save < 20):
                 images.append(image_to_save)
             count_to_save = count_to_save + 1
 
