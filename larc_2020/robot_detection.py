@@ -71,6 +71,9 @@ times = []
 list_of_images_arrays = []
 list_of_images_names = []
 
+os.system("clear")
+print("Loading images...\n")
+
 for image_path in TEST_IMAGE_PATHS:
     image = Image.open(image_path)
     image_np = load_image_into_numpy_array(image)
