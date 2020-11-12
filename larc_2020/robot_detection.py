@@ -60,7 +60,8 @@ def load_image_into_numpy_array(image):
 
 #*DETECTION IN IMAGES
 PATH_TO_TEST_IMAGES_DIR = 'test_images'
-TEST_IMAGE_PATHS = [ os.path.join(PATH_TO_TEST_IMAGES_DIR, 'robot_test_{}.jpg'.format(i)) for i in range(1, len(os.listdir("test_images")) + 1)]
+#TEST_IMAGE_PATHS = [ os.path.join(PATH_TO_TEST_IMAGES_DIR, 'robot_test_{}.jpg'.format(i)) for i in range(1, len(os.listdir("test_images")) + 1)]
+TEST_IMAGE_PATHS = os.listdir(PATH_TO_TEST_IMAGES_DIR)
 IMAGE_SIZE = (12, 8)
 
 images = []
@@ -75,14 +76,14 @@ os.system("clear")
 print("Loading images...\n")
 
 for image_path in TEST_IMAGE_PATHS:
-    image = Image.open(image_path)
+    image = Image.open('test_images/' + image_path)
     image_np = load_image_into_numpy_array(image)
     list_of_images_arrays.append(image_np)
 
-    image_name = image_path[12:len(image_path)]
+    image_name = image_path[0:len(image_path)]
     list_of_images_names.append(image_name)
 
-    arq_name = image_path[12:len(image_path)-4] + '.txt'
+    arq_name = image_path[0:len(image_path)-4] + '.txt'
     list_of_arq_names.append(arq_name)
 
     count_to_save += 1
@@ -183,10 +184,10 @@ for arq in list_of_arq_names:
 os.chdir('..')
 
 #*Recording images with bounding box
-i = 1
+i = 0
 for image in images:
     os.chdir('result_images')
     img = Image.fromarray(image)
-    img.save('robot_test_' + str(i) + '.jpg')
+    img.save(list_of_images_names[i])
     os.chdir('..')
     i = i +1
